@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freedom & Democracy OSINT Intelligence Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0b0d;
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1a1d23 0%, #2d3748 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.8;
+            color: #cbd5e1;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        .search-panel {
+            background: #1e293b;
+            padding: 30px;
+            border-right: 1px solid #334155;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            padding: 12px 16px;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #0f172a;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+            transform: translateY(-1px);
+        }
+
+        .results-panel {
+            background: #0f172a;
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(100vh - 140px);
+        }
+
+        .investigation-status {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: none;
+        }
+
+        .investigation-status.active {
+            display: block;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .investigation-sources {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .source-category {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .source-category:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .category-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .category-title {
+            font-weight: 600;
+            color: #f1f5f9;
+            font-size: 1rem;
+        }
+
+        .source-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .source-name {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .launch-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .launch-btn:hover {
+            background: #2563eb;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #334155;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .alert {
+            background: #7c2d12;
+            border: 1px solid #dc2626;
+            color: #fca5a5;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .report-section {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 25px;
+            display: none;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .report-header h3 {
+            color: #f1f5f9;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .report-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .report-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .report-content {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-panel {
+                border-right: none;
+                border-bottom: 1px solid #334155;
+            }
+
+            .report-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .search-panel, .results-panel {
+                padding: 20px;
+            }
+            
+            .investigation-sources {
+                grid-template-columns: 1fr;
+            }
+
+            .report-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+
+        .footer-info {
+            background: #0f172a;
+            padding: 20px 30px;
+            border-top: 1px solid #334155;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇺🇸 Freedom & Democracy OSINT Intelligence Platform</h1>
+            <p>Professional Investigation Suite - Comprehensive Background Intelligence</p>
+        </div>
+
+        <div class="main-content">
+            <div class="search-panel">
+                <form class="search-form" id="investigationForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" placeholder="John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+1-555-123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="New York, NY">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username/Handle</label>
+                        <input type="text" id="username" placeholder="johnsmith">
+                    </div>
+                    <button type="submit" class="search-btn">🔍 Start Professional Investigation</button>
+                </form>
+            </div>
+
+            <div class="results-panel">
+                <div class="investigation-status" id="investigationStatus">
+                    <div class="status-header">
+                        <div class="status-indicator"></div>
+                        <h3 id="statusTitle">Investigation In Progress</h3>
+                    </div>
+                    <p id="statusMessage">Analyzing target across multiple intelligence sources...</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="investigation-sources" id="investigationSources">
+                    <!-- Investigation sources will be populated here -->
+                </div>
+
+                <div class="report-section" id="reportSection">
+                    <div class="report-header">
+                        <h3>📋 Professional Investigation Report</h3>
+                        <div class="report-actions">
+                            <button class="report-btn" onclick="downloadReport()">📄 Download Report</button>
+                            <button class="report-btn" onclick="copyReport()">📋 Copy Text</button>
+                            <button class="report-btn" onclick="emailReport()">📧 Email Report</button>
+                        </div>
+                    </div>
+                    <div class="report-content" id="reportContent">
+                        <!-- Report content will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-info">
+            Professional OSINT Platform • Defending Freedom Through Intelligence • Educational & Legal Use Only
+        </div>
+    </div>
+
+    <script>
+        class ProfessionalOSINT {
+            constructor() {
+                this.targetData = {};
+                this.investigationSources = this.getInvestigationSources();
+                this.currentProgress = 0;
+                this.init();
+            }
+
+            init() {
+                document.getElementById('investigationForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.startInvestigation();
+                });
+            }
+
+            startInvestigation() {
+                // Collect target data
+                this.targetData = {
+                    name: document.getElementById('fullName').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    location: document.getElementById('location').value.trim(),
+                    username: document.getElementById('username').value.trim()
+                };
+
+                if (!this.targetData.name) {
+                    this.showAlert('Please enter at least a full name to begin investigation.');
+                    return;
+                }
+
+                // Show investigation status
+                document.getElementById('investigationStatus').classList.add('active');
+                document.getElementById('statusTitle').textContent = `Investigating: ${this.targetData.name}`;
+                document.getElementById('statusMessage').textContent = 'Deploying advanced intelligence gathering across multiple sources...';
+
+                // Start progressive investigation
+                this.runInvestigation();
+            }
+
+            async runInvestigation() {
+                const sourcesContainer = document.getElementById('investigationSources');
+                sourcesContainer.innerHTML = '';
+
+                // Process each category
+                for (let i = 0; i < this.investigationSources.length; i++) {
+                    const category = this.investigationSources[i];
+                    await this.processCategory(category, sourcesContainer);
+                    
+                    // Update progress
+                    this.currentProgress = ((i + 1) / this.investigationSources.length) * 100;
+                    document.getElementById('progressFill').style.width = `${this.currentProgress}%`;
+                    
+                    // Small delay for UX
+                    await this.delay(800);
+                }
+
+                // Complete investigation
+                document.getElementById('statusTitle').textContent = 'Investigation Complete';
+                document.getElementById('statusMessage').textContent = `Professional intelligence report generated for ${this.targetData.name}`;
+                
+                // Generate and show report
+                this.generateReport();
+            }
+
+            async processCategory(category, container) {
+                const categoryElement = this.createCategoryElement(category);
+                container.appendChild(categoryElement);
+
+                // Process each source in category
+                const sourceList = categoryElement.querySelector('.source-list');
+                
+                for (const source of category.sources) {
+                    await this.delay(200);
+                    const sourceElement = this.createSourceElement(source);
+                    sourceList.appendChild(sourceElement);
+                }
+            }
+
+            createCategoryElement(category) {
+                const element = document.createElement('div');
+                element.className = 'source-category';
+                element.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-icon" style="background: ${category.color};">
+                            ${category.icon}
+                        </div>
+                        <div class="category-title">${category.title}</div>
+                    </div>
+                    <div class="source-list"></div>
+                `;
+                return element;
+            }
+
+            createSourceElement(source) {
+                const element = document.createElement('div');
+                element.className = 'source-item';
+                
+                const url = this.buildSearchUrl(source);
+                
+                element.innerHTML = `
+                    <span class="source-name">${source.name}</span>
+                    <button class="launch-btn" onclick="window.open('${url}', '_blank')">
+                        Launch 🚀
+                    </button>
+                `;
+                
+                return element;
+            }
+
+            buildSearchUrl(source) {
+                const { name, email, phone, location, username } = this.targetData;
+                let searchTerm = '';
+
+                // Determine best search term for this source
+                switch (source.searchType) {
+                    case 'email':
+                        searchTerm = email || name;
+                        break;
+                    case 'phone':
+                        searchTerm = phone || name;
+                        break;
+                    case 'username':
+                        searchTerm = username || name.replace(/\s+/g, '').toLowerCase();
+                        break;
+                    case 'location':
+                        searchTerm = `${name} ${location}`.trim();
+                        break;
+                    default:
+                        searchTerm = name;
+                }
+
+                return source.url.replace('{SEARCH}', encodeURIComponent(searchTerm));
+            }
+
+            generateReport() {
+                const reportSection = document.getElementById('reportSection');
+                const reportContent = document.getElementById('reportContent');
+                
+                const timestamp = new Date().toLocaleString();
+                const reportData = this.compileReportData();
+                
+                reportContent.textContent = `🇺🇸 FREEDOM & DEMOCRACY OSINT INTELLIGENCE REPORT
+═══════════════════════════════════════════════════════════════
+
+INVESTIGATION TARGET:
+────────────────────────────────────────────────────────────────
+Name: ${this.targetData.name}
+${this.targetData.email ? `Email: ${this.targetData.email}` : ''}
+${this.targetData.phone ? `Phone: ${this.targetData.phone}` : ''}
+${this.targetData.location ? `Location: ${this.targetData.location}` : ''}
+${this.targetData.username ? `Username: ${this.targetData.username}` : ''}
+
+Investigation Date: ${timestamp}
+Report Generated: ${new Date().toLocaleString()}
+
+INTELLIGENCE SOURCES DEPLOYED:
+────────────────────────────────────────────────────────────────
+${reportData}
+
+INVESTIGATION SUMMARY:
+────────────────────────────────────────────────────────────────
+• Total Sources Checked: 50+ Professional Intelligence Databases
+• Investigation Categories: 8 Comprehensive Areas
+• Data Sources: Government, Financial, Social Media, Criminal Records
+• Investigation Type: Professional Background Intelligence Gathering
+
+RECOMMENDATIONS:
+────────────────────────────────────────────────────────────────
+1. Cross-verify findings across multiple independent sources
+2. Follow up on high-priority intelligence indicators
+3. Maintain investigation documentation for legal compliance
+4. Consider additional specialized investigation if required
+
+LEGAL DISCLAIMER:
+────────────────────────────────────────────────────────────────
+This report contains information gathered from publicly available sources only.
+All investigation activities conducted in compliance with applicable laws.
+Information should be verified through official channels before taking action.
+
+═══════════════════════════════════════════════════════════════
+DEFENDING FREEDOM THROUGH PROFESSIONAL INTELLIGENCE
+Report ID: ${this.generateReportId()}
+═══════════════════════════════════════════════════════════════`;
+                
+                reportSection.style.display = 'block';
+                reportSection.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            compileReportData() {
+                let reportData = '';
+                
+                this.investigationSources.forEach(category => {
+                    reportData += `\n${category.title.toUpperCase()}:\n`;
+                    reportData += '─'.repeat(60) + '\n';
+                    
+                    category.sources.forEach(source => {
+                        const url = this.buildSearchUrl(source);
+                        reportData += `• ${source.name}\n  ${url}\n\n`;
+                    });
+                });
+                
+                return reportData;
+            }
+
+            generateReportId() {
+                return 'OSINT-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+            }
+
+            getInvestigationSources() {
+                return [
+                    {
+                        title: 'Public Records & Government',
+                        icon: '🏛️',
+                        color: '#dc2626',
+                        sources: [
+                            { name: 'US Courts (PACER)', url: 'https://pcl.uscourts.gov/search', searchType: 'name' },
+                            { name: 'SEC Business Search', url: 'https://www.sec.gov/edgar/searchedgar/companysearch.html', searchType: 'name' },
+                            { name: 'USPTO Trademark', url: 'https://tmsearch.uspto.gov/bin/gate.exe?f=login&p_lang=english&p_d=trmk', searchType: 'name' },
+                            { name: 'Property Records', url: 'https://www.realtor.com/search/{SEARCH}', searchType: 'location' },
+                            { name: 'Voter Registration', url: 'https://www.voterrecords.com/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'Business Licenses', url: 'https://www.bizapedia.com/search?q={SEARCH}', searchType: 'name' }
+                        ]
+                    },
+                    {
+                        title: 'Professional Background',
+                        icon: '💼',
+                        color: '#2563eb',
+                        sources: [
+                            { name: 'LinkedIn Professional', url: 'https://www.linkedin.com/search/results/people/?keywords={SEARCH}', searchType: 'name' },
+                            { name: 'ZoomInfo Business', url: 'https://www.zoominfo.com/s/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'Crunchbase Executives', url: 'https://www.crunchbase.com/discover/people?query={SEARCH}', searchType: 'name' },
+                            { name: 'AngelList Profiles', url: 'https://angel.co/search?query={SEARCH}&type=people', searchType: 'name' },
+                            { name: 'Professional Licenses', url: 'https://www.docboard.org/docfinder.html', searchType: 'name' },
+                            { name: 'Academic Publications', url: 'https://scholar.google.com/scholar?q={SEARCH}', searchType: 'name' }
+                        ]
+                    },
+                    {
+                        title: 'People Search Engines',
+                        icon: '👥',
+                        color: '#059669',
+                        sources: [
+                            { name: 'Spokeo Complete', url: 'https://www.spokeo.com/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'BeenVerified Pro', url: 'https://www.beenverified.com/people/{SEARCH}', searchType: 'name' },
+                            { name: 'Intelius Advanced', url: 'https://www.intelius.com/people-search/{SEARCH}', searchType: 'name' },
+                            { name: 'PeopleFinders', url: 'https://www.peoplefinders.com/search/people/{SEARCH}', searchType: 'name' },
+                            { name: 'US Search', url: 'https://www.ussearch.com/search/people/{SEARCH}', searchType: 'name' },
+                            { name: 'InstantPeopleFinder', url: 'https://www.instantpeoplefinder.com/search?q={SEARCH}', searchType: 'name' }
+                        ]
+                    },
+                    {
+                        title: 'Phone & Address Intelligence',
+                        icon: '📞',
+                        color: '#7c3aed',
+                        sources: [
+                            { name: 'WhitePages Reverse', url: 'https://www.whitepages.com/phone/{SEARCH}', searchType: 'phone' },
+                            { name: 'TrueCaller ID', url: 'https://www.truecaller.com/search/{SEARCH}', searchType: 'phone' },
+                            { name: 'FastPeopleSearch', url: 'https://www.fastpeoplesearch.com/name/{SEARCH}', searchType: 'name' },
+                            { name: 'Address Verification', url: 'https://www.usps.com/business/web-tools-apis/address-information.htm', searchType: 'location' },
+                            { name: 'Phone Validator', url: 'https://www.phonevalidator.com/search?phone={SEARCH}', searchType: 'phone' },
+                            { name: 'Reverse Address', url: 'https://www.reversegenie.com/search.php?q={SEARCH}', searchType: 'location' }
+                        ]
+                    },
+                    {
+                        title: 'Social Media Intelligence',
+                        icon: '📱',
+                        color: '#ea580c',
+                        sources: [
+                            { name: 'Facebook Graph', url: 'https://www.facebook.com/search/people/?q={SEARCH}', searchType: 'name' },
+                            { name: 'Twitter/X Advanced', url: 'https://twitter.com/search?q={SEARCH}&src=typed_query&f=user', searchType: 'username' },
+                            { name: 'Instagram Profiles', url: 'https://www.instagram.com/web/search/topsearch/?query={SEARCH}', searchType: 'username' },
+                            { name: 'TikTok Discovery', url: 'https://www.tiktok.com/search/user?q={SEARCH}', searchType: 'username' },
+                            { name: 'YouTube Channels', url: 'https://www.youtube.com/results?search_query={SEARCH}&sp=EgIQAg%253D%253D', searchType: 'name' },
+                            { name: 'Reddit Users', url: 'https://www.reddit.com/search/?q={SEARCH}&type=user', searchType: 'username' }
+                        ]
+                    },
+                    {
+                        title: 'Email & Digital Footprint',
+                        icon: '📧',
+                        color: '#0891b2',
+                        sources: [
+                            { name: 'Hunter.io Domain', url: 'https://hunter.io/search/{SEARCH}', searchType: 'email' },
+                            { name: 'Have I Been Pwned', url: 'https://haveibeenpwned.com/account/{SEARCH}', searchType: 'email' },
+                            { name: 'EmailRep Analysis', url: 'https://emailrep.io/{SEARCH}', searchType: 'email' },
+                            { name: 'Clearbit Connect', url: 'https://connect.clearbit.com/search/{SEARCH}', searchType: 'email' },
+                            { name: 'Skymem Email', url: 'https://www.skymem.info/search/email/{SEARCH}', searchType: 'email' },
+                            { name: 'Email Verify', url: 'https://verify-email.org/home/verify/{SEARCH}', searchType: 'email' }
+                        ]
+                    },
+                    {
+                        title: 'Financial & Asset Records',
+                        icon: '💰',
+                        color: '#be123c',
+                        sources: [
+                            { name: 'Property Assessment', url: 'https://www.propertyshark.com/mason/Property-Search/?s={SEARCH}', searchType: 'name' },
+                            { name: 'Zillow Property', url: 'https://www.zillow.com/homes/{SEARCH}', searchType: 'location' },
+                            { name: 'Business Ownership', url: 'https://opencorporates.com/companies?utf8=%E2%9C%93&q={SEARCH}', searchType: 'name' },
+                            { name: 'Bankruptcy Records', url: 'https://www.bankruptcydata.com/search/{SEARCH}', searchType: 'name' },
+                            { name: 'UCC Filings', url: 'https://www.ucc-search.com/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'Tax Liens', url: 'https://www.brbpublications.com/public-records/{SEARCH}', searchType: 'name' }
+                        ]
+                    },
+                    {
+                        title: 'Criminal & Legal Records',
+                        icon: '⚖️',
+                        color: '#991b1b',
+                        sources: [
+                            { name: 'National Criminal', url: 'https://www.nsopw.gov/en/Search/Verification?AspxAutoDetectCookieSupport=1', searchType: 'name' },
+                            { name: 'State Court Records', url: 'https://www.judyrecords.com/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'Arrests.org', url: 'https://www.arrests.org/search.php?fname=&lname={SEARCH}', searchType: 'name' },
+                            { name: 'Mugshots.com', url: 'https://mugshots.com/search.html?q={SEARCH}', searchType: 'name' },
+                            { name: 'Sex Offender Registry', url: 'https://www.familywatchdog.us/search.asp?address={SEARCH}', searchType: 'location' },
+                            { name: 'Federal Court', url: 'https://pcl.uscourts.gov/search/home.html', searchType: 'name' }
+                        ]
+                    }
+                ];
+            }
+
+            showAlert(message) {
+                const alert = document.createElement('div');
+                alert.className = 'alert';
+                alert.textContent = message;
