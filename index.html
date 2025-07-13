@@ -318,6 +318,87 @@
             font-size: 0.8rem;
             color: #64748b;
         }
+
+        .report-section {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .report-header h3 {
+            color: #f1f5f9;
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .report-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .report-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .report-content {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .report-section h4 {
+            color: #60a5fa;
+            margin: 15px 0 10px 0;
+            font-size: 1rem;
+        }
+
+        .report-section .category-results {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            border-radius: 4px;
+        }
+
+        .source-url {
+            color: #10b981;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+
+        .source-url:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -368,6 +449,20 @@
 
                 <div class="investigation-sources" id="investigationSources">
                     <!-- Investigation sources will be populated here -->
+                </div>
+
+                <div class="report-section" id="reportSection" style="display: none;">
+                    <div class="report-header">
+                        <h3>📋 Professional Investigation Report</h3>
+                        <div class="report-actions">
+                            <button class="report-btn" onclick="downloadReport()">📄 Download PDF</button>
+                            <button class="report-btn" onclick="copyReport()">📋 Copy Text</button>
+                            <button class="report-btn" onclick="emailReport()">📧 Email Report</button>
+                        </div>
+                    </div>
+                    <div class="report-content" id="reportContent">
+                        <!-- Report content will be generated here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -437,6 +532,9 @@
                 // Complete investigation
                 document.getElementById('statusTitle').textContent = 'Investigation Complete';
                 document.getElementById('statusMessage').textContent = `Professional intelligence report generated for ${this.targetData.name}`;
+                
+                // Generate and show report
+                this.generateReport();
             }
 
             async processCategory(category, container) {
