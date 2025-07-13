@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSINT Background Check Pro - MVP</title>
+    <title>Freedom & Democracy OSINT Intelligence Platform</title>
     <style>
         * {
             margin: 0;
@@ -12,49 +12,57 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0b0d;
+            color: #ffffff;
             min-height: 100vh;
-            padding: 20px;
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            background: linear-gradient(135deg, #1a1d23 0%, #2d3748 100%);
+            min-height: 100vh;
         }
 
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            padding: 30px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 40px 30px;
             text-align: center;
+            border-bottom: 1px solid #334155;
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 12px;
             font-weight: 700;
+            color: #f1f5f9;
         }
 
         .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 1rem;
+            opacity: 0.8;
+            color: #cbd5e1;
         }
 
-        .search-section {
-            padding: 40px;
-            background: white;
+        .main-content {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: 0;
+            min-height: calc(100vh - 140px);
+        }
+
+        .search-panel {
+            background: #1e293b;
+            padding: 30px;
+            border-right: 1px solid #334155;
         }
 
         .search-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 20px;
-            margin-bottom: 30px;
         }
 
         .form-group {
@@ -65,31 +73,33 @@
         .form-group label {
             font-weight: 600;
             margin-bottom: 8px;
-            color: #333;
+            color: #e2e8f0;
+            font-size: 0.9rem;
         }
 
         .form-group input {
             padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 1rem;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background: #0f172a;
+            color: #ffffff;
             transition: all 0.3s ease;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .search-btn {
-            grid-column: 1 / -1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
             color: white;
             border: none;
-            padding: 16px 32px;
-            border-radius: 10px;
-            font-size: 1.1rem;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -97,709 +107,537 @@
         }
 
         .search-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
-            padding: 0 40px 40px;
-        }
-
-        .tool-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            border: 2px solid #f0f0f0;
-        }
-
-        .tool-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-            border-color: #667eea;
-        }
-
-        .tool-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .tool-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-right: 15px;
-            color: white;
-        }
-
-        .tool-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .tool-description {
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .tool-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        .tool-btn:hover {
-            background: #5a6fd8;
+            background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
             transform: translateY(-1px);
         }
 
-        .results-section {
-            background: #f8f9fa;
-            padding: 40px;
-            border-top: 2px solid #e1e5e9;
+        .results-panel {
+            background: #0f172a;
+            padding: 30px;
+            overflow-y: auto;
+            max-height: calc(100vh - 140px);
         }
 
-        .results-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .result-card {
-            background: white;
-            border-radius: 10px;
+        .investigation-status {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+            display: none;
         }
 
-        .result-status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+        .investigation-status.active {
+            display: block;
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .investigation-sources {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .source-category {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .source-category:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .category-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .category-title {
             font-weight: 600;
-            margin-bottom: 10px;
+            color: #f1f5f9;
+            font-size: 1rem;
         }
 
-        .status-success {
-            background: #d4edda;
-            color: #155724;
+        .source-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .status-warning {
-            background: #fff3cd;
-            color: #856404;
+        .source-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 6px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
-        .status-info {
-            background: #d1ecf1;
-            color: #0c5460;
+        .source-name {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        .source-status {
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .status-ready {
+            background: #065f46;
+            color: #10b981;
+        }
+
+        .status-checking {
+            background: #92400e;
+            color: #f59e0b;
+        }
+
+        .status-found {
+            background: #1e40af;
+            color: #60a5fa;
+        }
+
+        .launch-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .launch-btn:hover {
+            background: #2563eb;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #334155;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .alert {
+            background: #7c2d12;
+            border: 1px solid #dc2626;
+            color: #fca5a5;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-panel {
+                border-right: none;
+                border-bottom: 1px solid #334155;
+            }
         }
 
         @media (max-width: 768px) {
-            .search-form {
-                grid-template-columns: 1fr;
-            }
-            
-            .tools-grid {
-                grid-template-columns: 1fr;
-                padding: 0 20px 40px;
-            }
-            
-            .search-section, .results-section {
+            .header {
                 padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .search-panel, .results-panel {
+                padding: 20px;
+            }
+            
+            .investigation-sources {
+                grid-template-columns: 1fr;
             }
         }
 
-        .hidden {
-            display: none;
+        .footer-info {
+            background: #0f172a;
+            padding: 20px 30px;
+            border-top: 1px solid #334155;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #64748b;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 OSINT Background Check Pro</h1>
-            <p>Professional-grade background investigations made simple</p>
+            <h1>🇺🇸 Freedom & Democracy OSINT Intelligence Platform</h1>
+            <p>Professional Investigation Suite - Comprehensive Background Intelligence</p>
         </div>
 
-        <div class="search-section">
-            <form class="search-form" id="searchForm">
-                <div class="form-group">
-                    <label for="fullName">Full Name *</label>
-                    <input type="text" id="fullName" placeholder="e.g., John Smith" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="e.g., john@example.com">
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" placeholder="e.g., +1-555-123-4567">
-                </div>
-                <div class="form-group">
-                    <label for="location">Location</label>
-                    <input type="text" id="location" placeholder="e.g., New York, NY">
-                </div>
-                <button type="submit" class="search-btn">🚀 Start Background Check</button>
-            </form>
-        </div>
-
-        <div class="tools-grid">
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #FF6B6B;">👤</div>
-                    <div class="tool-title">People Search</div>
-                </div>
-                <div class="tool-description">
-                    Find basic information, addresses, phone numbers, and relatives using TruePeopleSearch and Pipl.
-                </div>
-                <button class="tool-btn" onclick="searchPeople()">Search People</button>
+        <div class="main-content">
+            <div class="search-panel">
+                <form class="search-form" id="investigationForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" placeholder="John Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+1-555-123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="New York, NY">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username/Handle</label>
+                        <input type="text" id="username" placeholder="johnsmith">
+                    </div>
+                    <button type="submit" class="search-btn">🔍 Start Professional Investigation</button>
+                </form>
             </div>
 
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #4ECDC4;">🔒</div>
-                    <div class="tool-title">Data Breaches</div>
+            <div class="results-panel">
+                <div class="investigation-status" id="investigationStatus">
+                    <div class="status-header">
+                        <div class="status-indicator"></div>
+                        <h3 id="statusTitle">Investigation In Progress</h3>
+                    </div>
+                    <p id="statusMessage">Analyzing target across multiple intelligence sources...</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
                 </div>
-                <div class="tool-description">
-                    Check if email addresses or passwords have been compromised in known data breaches.
-                </div>
-                <button class="tool-btn" onclick="checkBreaches()">Check Breaches</button>
-            </div>
 
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #45B7D1;">📱</div>
-                    <div class="tool-title">Social Media</div>
+                <div class="investigation-sources" id="investigationSources">
+                    <!-- Investigation sources will be populated here -->
                 </div>
-                <div class="tool-description">
-                    Search across social platforms for profiles, posts, and digital footprints.
-                </div>
-                <button class="tool-btn" onclick="searchSocial()">Search Social</button>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #96CEB4;">📧</div>
-                    <div class="tool-title">Email Intel</div>
-                </div>
-                <div class="tool-description">
-                    Find email addresses by domain and verify email authenticity using Hunter.io.
-                </div>
-                <button class="tool-btn" onclick="emailIntel()">Email Search</button>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #FFEAA7;">🔍</div>
-                    <div class="tool-title">Advanced Search</div>
-                </div>
-                <div class="tool-description">
-                    Use Google advanced operators and specialized search techniques for deep research.
-                </div>
-                <button class="tool-btn" onclick="advancedSearch()">Advanced Search</button>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #FD79A8;">🌐</div>
-                    <div class="tool-title">Website Analysis</div>
-                </div>
-                <div class="tool-description">
-                    Analyze websites, discover technologies, and find connected domains.
-                </div>
-                <button class="tool-btn" onclick="websiteAnalysis()">Analyze Sites</button>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #A29BFE;">🔗</div>
-                    <div class="tool-title">Link Analysis</div>
-                </div>
-                <div class="tool-description">
-                    Map connections and relationships using Maltego Community Edition.
-                </div>
-                <button class="tool-btn" onclick="linkAnalysis()">Map Links</button>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #6C5CE7;">🕵️</div>
-                    <div class="tool-title">Username Search</div>
-                </div>
-                <div class="tool-description">
-                    Check username availability and find accounts across 300+ platforms.
-                </div>
-                <button class="tool-btn" onclick="usernameSearch()">Username Hunt</button>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #E17055;">📊</div>
-                    <div class="tool-title">Device Discovery</div>
-                </div>
-                <div class="tool-description">
-                    Find internet-connected devices and systems using Shodan search engine.
-                </div>
-                <button class="tool-btn" onclick="deviceDiscovery()">Discover Devices</button>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-header">
-                    <div class="tool-icon" style="background: #00B894;">🤖</div>
-                    <div class="tool-title">Auto Investigation</div>
-                </div>
-                <div class="tool-description">
-                    Automated OSINT tool that collects data on IP addresses, domains, and more.
-                </div>
-                <button class="tool-btn" onclick="autoInvestigation()">Auto Investigate</button>
             </div>
         </div>
 
-        <div class="results-section hidden" id="resultsSection">
-            <h2 class="results-title">📋 Investigation Results</h2>
-            <div class="results-grid" id="resultsGrid">
-                <!-- Results will be populated here -->
-            </div>
+        <div class="footer-info">
+            Professional OSINT Platform • Defending Freedom Through Intelligence • Educational & Legal Use Only
         </div>
     </div>
 
     <script>
-        let currentTarget = {};
-
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            currentTarget = {
-                name: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                location: document.getElementById('location').value
-            };
-            
-            if (!currentTarget.name) {
-                alert('Please enter at least a full name to start the investigation.');
-                return;
+        class ProfessionalOSINT {
+            constructor() {
+                this.targetData = {};
+                this.investigationSources = this.getInvestigationSources();
+                this.currentProgress = 0;
+                this.init();
             }
-            
-            document.getElementById('resultsSection').classList.remove('hidden');
-            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
-            
-            showResult('Target Set', `Investigation target: ${currentTarget.name}`, 'info');
+
+            init() {
+                document.getElementById('investigationForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.startInvestigation();
+                });
+            }
+
+            startInvestigation() {
+                // Collect target data
+                this.targetData = {
+                    name: document.getElementById('fullName').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    location: document.getElementById('location').value.trim(),
+                    username: document.getElementById('username').value.trim()
+                };
+
+                if (!this.targetData.name) {
+                    this.showAlert('Please enter at least a full name to begin investigation.');
+                    return;
+                }
+
+                // Show investigation status
+                document.getElementById('investigationStatus').classList.add('active');
+                document.getElementById('statusTitle').textContent = `Investigating: ${this.targetData.name}`;
+                document.getElementById('statusMessage').textContent = 'Deploying advanced intelligence gathering across multiple sources...';
+
+                // Start progressive investigation
+                this.runInvestigation();
+            }
+
+            async runInvestigation() {
+                const sourcesContainer = document.getElementById('investigationSources');
+                sourcesContainer.innerHTML = '';
+
+                // Process each category
+                for (let i = 0; i < this.investigationSources.length; i++) {
+                    const category = this.investigationSources[i];
+                    await this.processCategory(category, sourcesContainer);
+                    
+                    // Update progress
+                    this.currentProgress = ((i + 1) / this.investigationSources.length) * 100;
+                    document.getElementById('progressFill').style.width = `${this.currentProgress}%`;
+                    
+                    // Small delay for UX
+                    await this.delay(800);
+                }
+
+                // Complete investigation
+                document.getElementById('statusTitle').textContent = 'Investigation Complete';
+                document.getElementById('statusMessage').textContent = `Professional intelligence report generated for ${this.targetData.name}`;
+            }
+
+            async processCategory(category, container) {
+                const categoryElement = this.createCategoryElement(category);
+                container.appendChild(categoryElement);
+
+                // Process each source in category
+                const sourceList = categoryElement.querySelector('.source-list');
+                
+                for (const source of category.sources) {
+                    await this.delay(200);
+                    const sourceElement = this.createSourceElement(source);
+                    sourceList.appendChild(sourceElement);
+                }
+            }
+
+            createCategoryElement(category) {
+                const element = document.createElement('div');
+                element.className = 'source-category';
+                element.innerHTML = `
+                    <div class="category-header">
+                        <div class="category-icon" style="background: ${category.color};">
+                            ${category.icon}
+                        </div>
+                        <div class="category-title">${category.title}</div>
+                    </div>
+                    <div class="source-list"></div>
+                `;
+                return element;
+            }
+
+            createSourceElement(source) {
+                const element = document.createElement('div');
+                element.className = 'source-item';
+                
+                const url = this.buildSearchUrl(source);
+                
+                element.innerHTML = `
+                    <span class="source-name">${source.name}</span>
+                    <button class="launch-btn" onclick="window.open('${url}', '_blank')">
+                        Launch 🚀
+                    </button>
+                `;
+                
+                return element;
+            }
+
+            buildSearchUrl(source) {
+                const { name, email, phone, location, username } = this.targetData;
+                let searchTerm = '';
+
+                // Determine best search term for this source
+                switch (source.searchType) {
+                    case 'email':
+                        searchTerm = email || name;
+                        break;
+                    case 'phone':
+                        searchTerm = phone || name;
+                        break;
+                    case 'username':
+                        searchTerm = username || name.replace(/\s+/g, '').toLowerCase();
+                        break;
+                    case 'location':
+                        searchTerm = `${name} ${location}`.trim();
+                        break;
+                    default:
+                        searchTerm = name;
+                }
+
+                return source.url.replace('{SEARCH}', encodeURIComponent(searchTerm));
+            }
+
+            getInvestigationSources() {
+                return [
+                    {
+                        title: 'Public Records & Government',
+                        icon: '🏛️',
+                        color: '#dc2626',
+                        sources: [
+                            { name: 'US Courts (PACER)', url: 'https://pcl.uscourts.gov/search', searchType: 'name' },
+                            { name: 'SEC Business Search', url: 'https://www.sec.gov/edgar/searchedgar/companysearch.html', searchType: 'name' },
+                            { name: 'USPTO Trademark', url: 'https://tmsearch.uspto.gov/bin/gate.exe?f=login&p_lang=english&p_d=trmk', searchType: 'name' },
+                            { name: 'Property Records', url: 'https://www.realtor.com/search/{SEARCH}', searchType: 'location' },
+                            { name: 'Voter Registration', url: 'https://www.voterrecords.com/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'Business Licenses', url: 'https://www.bizapedia.com/search?q={SEARCH}', searchType: 'name' }
+                        ]
+                    },
+                    {
+                        title: 'Professional Background',
+                        icon: '💼',
+                        color: '#2563eb',
+                        sources: [
+                            { name: 'LinkedIn Professional', url: 'https://www.linkedin.com/search/results/people/?keywords={SEARCH}', searchType: 'name' },
+                            { name: 'ZoomInfo Business', url: 'https://www.zoominfo.com/s/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'Crunchbase Executives', url: 'https://www.crunchbase.com/discover/people?query={SEARCH}', searchType: 'name' },
+                            { name: 'AngelList Profiles', url: 'https://angel.co/search?query={SEARCH}&type=people', searchType: 'name' },
+                            { name: 'Professional Licenses', url: 'https://www.docboard.org/docfinder.html', searchType: 'name' },
+                            { name: 'Academic Publications', url: 'https://scholar.google.com/scholar?q={SEARCH}', searchType: 'name' }
+                        ]
+                    },
+                    {
+                        title: 'People Search Engines',
+                        icon: '👥',
+                        color: '#059669',
+                        sources: [
+                            { name: 'Spokeo Complete', url: 'https://www.spokeo.com/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'BeenVerified Pro', url: 'https://www.beenverified.com/people/{SEARCH}', searchType: 'name' },
+                            { name: 'Intelius Advanced', url: 'https://www.intelius.com/people-search/{SEARCH}', searchType: 'name' },
+                            { name: 'PeopleFinders', url: 'https://www.peoplefinders.com/search/people/{SEARCH}', searchType: 'name' },
+                            { name: 'US Search', url: 'https://www.ussearch.com/search/people/{SEARCH}', searchType: 'name' },
+                            { name: 'InstantPeopleFinder', url: 'https://www.instantpeoplefinder.com/search?q={SEARCH}', searchType: 'name' }
+                        ]
+                    },
+                    {
+                        title: 'Phone & Address Intelligence',
+                        icon: '📞',
+                        color: '#7c3aed',
+                        sources: [
+                            { name: 'WhitePages Reverse', url: 'https://www.whitepages.com/phone/{SEARCH}', searchType: 'phone' },
+                            { name: 'TrueCaller ID', url: 'https://www.truecaller.com/search/{SEARCH}', searchType: 'phone' },
+                            { name: 'FastPeopleSearch', url: 'https://www.fastpeoplesearch.com/name/{SEARCH}', searchType: 'name' },
+                            { name: 'Address Verification', url: 'https://www.usps.com/business/web-tools-apis/address-information.htm', searchType: 'location' },
+                            { name: 'Phone Validator', url: 'https://www.phonevalidator.com/search?phone={SEARCH}', searchType: 'phone' },
+                            { name: 'Reverse Address', url: 'https://www.reversegenie.com/search.php?q={SEARCH}', searchType: 'location' }
+                        ]
+                    },
+                    {
+                        title: 'Social Media Intelligence',
+                        icon: '📱',
+                        color: '#ea580c',
+                        sources: [
+                            { name: 'Facebook Graph', url: 'https://www.facebook.com/search/people/?q={SEARCH}', searchType: 'name' },
+                            { name: 'Twitter/X Advanced', url: 'https://twitter.com/search?q={SEARCH}&src=typed_query&f=user', searchType: 'username' },
+                            { name: 'Instagram Profiles', url: 'https://www.instagram.com/web/search/topsearch/?query={SEARCH}', searchType: 'username' },
+                            { name: 'TikTok Discovery', url: 'https://www.tiktok.com/search/user?q={SEARCH}', searchType: 'username' },
+                            { name: 'YouTube Channels', url: 'https://www.youtube.com/results?search_query={SEARCH}&sp=EgIQAg%253D%253D', searchType: 'name' },
+                            { name: 'Reddit Users', url: 'https://www.reddit.com/search/?q={SEARCH}&type=user', searchType: 'username' }
+                        ]
+                    },
+                    {
+                        title: 'Email & Digital Footprint',
+                        icon: '📧',
+                        color: '#0891b2',
+                        sources: [
+                            { name: 'Hunter.io Domain', url: 'https://hunter.io/search/{SEARCH}', searchType: 'email' },
+                            { name: 'Have I Been Pwned', url: 'https://haveibeenpwned.com/account/{SEARCH}', searchType: 'email' },
+                            { name: 'EmailRep Analysis', url: 'https://emailrep.io/{SEARCH}', searchType: 'email' },
+                            { name: 'Clearbit Connect', url: 'https://connect.clearbit.com/search/{SEARCH}', searchType: 'email' },
+                            { name: 'Skymem Email', url: 'https://www.skymem.info/search/email/{SEARCH}', searchType: 'email' },
+                            { name: 'Email Verify', url: 'https://verify-email.org/home/verify/{SEARCH}', searchType: 'email' }
+                        ]
+                    },
+                    {
+                        title: 'Financial & Asset Records',
+                        icon: '💰',
+                        color: '#be123c',
+                        sources: [
+                            { name: 'Property Assessment', url: 'https://www.propertyshark.com/mason/Property-Search/?s={SEARCH}', searchType: 'name' },
+                            { name: 'Zillow Property', url: 'https://www.zillow.com/homes/{SEARCH}', searchType: 'location' },
+                            { name: 'Business Ownership', url: 'https://opencorporates.com/companies?utf8=%E2%9C%93&q={SEARCH}', searchType: 'name' },
+                            { name: 'Bankruptcy Records', url: 'https://www.bankruptcydata.com/search/{SEARCH}', searchType: 'name' },
+                            { name: 'UCC Filings', url: 'https://www.ucc-search.com/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'Tax Liens', url: 'https://www.brbpublications.com/public-records/{SEARCH}', searchType: 'name' }
+                        ]
+                    },
+                    {
+                        title: 'Criminal & Legal Records',
+                        icon: '⚖️',
+                        color: '#991b1b',
+                        sources: [
+                            { name: 'National Criminal', url: 'https://www.nsopw.gov/en/Search/Verification?AspxAutoDetectCookieSupport=1', searchType: 'name' },
+                            { name: 'State Court Records', url: 'https://www.judyrecords.com/search?q={SEARCH}', searchType: 'name' },
+                            { name: 'Arrests.org', url: 'https://www.arrests.org/search.php?fname=&lname={SEARCH}', searchType: 'name' },
+                            { name: 'Mugshots.com', url: 'https://mugshots.com/search.html?q={SEARCH}', searchType: 'name' },
+                            { name: 'Sex Offender Registry', url: 'https://www.familywatchdog.us/search.asp?address={SEARCH}', searchType: 'location' },
+                            { name: 'Federal Court', url: 'https://pcl.uscourts.gov/search/home.html', searchType: 'name' }
+                        ]
+                    }
+                ];
+            }
+
+            showAlert(message) {
+                const alert = document.createElement('div');
+                alert.className = 'alert';
+                alert.textContent = message;
+                
+                const form = document.querySelector('.search-form');
+                form.insertBefore(alert, form.firstChild);
+                
+                setTimeout(() => alert.remove(), 5000);
+            }
+
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            new ProfessionalOSINT();
         });
-
-        function showResult(title, description, status = 'info') {
-            const resultsGrid = document.getElementById('resultsGrid');
-            
-            const resultCard = document.createElement('div');
-            resultCard.className = 'result-card';
-            resultCard.innerHTML = `
-                <div class="result-status status-${status}">${status.toUpperCase()}</div>
-                <h3>${title}</h3>
-                <p>${description}</p>
-                <small>Timestamp: ${new Date().toLocaleString()}</small>
-            `;
-            
-            resultsGrid.appendChild(resultCard);
-        }
-
-        function searchPeople() {
-            if (!currentTarget.name) {
-                alert('Please set a target first by filling out the search form above.');
-                return;
-            }
-            
-            const tools = [
-                { name: 'TruePeopleSearch', url: `https://www.truepeoplesearch.com/results?name=${encodeURIComponent(currentTarget.name)}` },
-                { name: 'Pipl', url: `https://pipl.com/search/?q=${encodeURIComponent(currentTarget.name)}` },
-                { name: 'Spokeo', url: `https://www.spokeo.com/search?q=${encodeURIComponent(currentTarget.name)}` }
-            ];
-            
-            tools.forEach(tool => {
-                window.open(tool.url, '_blank');
-            });
-            
-            showResult('People Search', `Opened ${tools.length} people search tools for: ${currentTarget.name}`, 'success');
-        }
-
-        function checkBreaches() {
-            if (!currentTarget.email) {
-                alert('Please enter an email address in the search form first.');
-                return;
-            }
-            
-            const tools = [
-                { name: 'Have I Been Pwned', url: `https://haveibeenpwned.com/account/${encodeURIComponent(currentTarget.email)}` },
-                { name: 'XposedOrNot', url: `https://xposedornot.com/` }
-            ];
-            
-            tools.forEach(tool => {
-                window.open(tool.url, '_blank');
-            });
-            
-            showResult('Breach Check', `Checking data breaches for: ${currentTarget.email}`, 'warning');
-        }
-
-        function searchSocial() {
-            if (!currentTarget.name) {
-                alert('Please set a target first by filling out the search form above.');
-                return;
-            }
-            
-            const platforms = [
-                { name: 'Facebook', url: `https://www.facebook.com/search/people/?q=${encodeURIComponent(currentTarget.name)}` },
-                { name: 'LinkedIn', url: `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(currentTarget.name)}` },
-                { name: 'Twitter/X', url: `https://twitter.com/search?q=${encodeURIComponent(currentTarget.name)}&src=typed_query&f=user` },
-                { name: 'Instagram', url: `https://www.instagram.com/web/search/topsearch/?query=${encodeURIComponent(currentTarget.name)}` }
-            ];
-            
-            platforms.forEach(platform => {
-                window.open(platform.url, '_blank');
-            });
-            
-            showResult('Social Media Search', `Searching social platforms for: ${currentTarget.name}`, 'info');
-        }
-
-        function emailIntel() {
-            if (!currentTarget.email) {
-                alert('Please enter an email address in the search form first.');
-                return;
-            }
-            
-            const domain = currentTarget.email.split('@')[1];
-            const tools = [
-                { name: 'Hunter.io', url: `https://hunter.io/search/${domain}` },
-                { name: 'Email Hippo', url: `https://tools.emailhippo.com/` }
-            ];
-            
-            tools.forEach(tool => {
-                window.open(tool.url, '_blank');
-            });
-            
-            showResult('Email Intelligence', `Gathering email intel for domain: ${domain}`, 'info');
-        }
-
-        function advancedSearch() {
-            if (!currentTarget.name) {
-                alert('Please set a target first by filling out the search form above.');
-                return;
-            }
-            
-            const searches = [
-                `https://www.google.com/search?q="${currentTarget.name}" site:linkedin.com`,
-                `https://www.google.com/search?q="${currentTarget.name}" filetype:pdf`,
-                `https://www.google.com/search?q="${currentTarget.name}" site:facebook.com`,
-                `https://www.google.com/search?q="${currentTarget.name}" inurl:resume OR inurl:cv`
-            ];
-            
-            searches.forEach(search => {
-                window.open(search, '_blank');
-            });
-            
-            showResult('Advanced Search', `Running Google dorks for: ${currentTarget.name}`, 'success');
-        }
-
-        function websiteAnalysis() {
-            const tools = [
-                { name: 'BuiltWith', url: 'https://builtwith.com/' },
-                { name: 'Wayback Machine', url: 'https://web.archive.org/' }
-            ];
-            
-            tools.forEach(tool => {
-                window.open(tool.url, '_blank');
-            });
-            
-            showResult('Website Analysis', 'Opened website analysis tools', 'info');
-        }
-
-        function linkAnalysis() {
-            window.open('https://www.maltego.com/downloads/', '_blank');
-            showResult('Link Analysis', 'Opened Maltego download page for relationship mapping', 'info');
-        }
-
-        function usernameSearch() {
-            if (!currentTarget.name) {
-                alert('Please set a target first by filling out the search form above.');
-                return;
-            }
-            
-            const username = currentTarget.name.replace(/\s+/g, '').toLowerCase();
-            const tools = [
-                { name: 'Instant Username Search', url: `https://instantusername.com/#/${username}` },
-                { name: 'Namechk', url: `https://namechk.com/` }
-            ];
-            
-            tools.forEach(tool => {
-                window.open(tool.url, '_blank');
-            });
-            
-            showResult('Username Search', `Searching for username variations of: ${username}`, 'info');
-        }
-
-        function deviceDiscovery() {
-            window.open('https://www.shodan.io/', '_blank');
-            showResult('Device Discovery', 'Opened Shodan for internet-connected device discovery', 'info');
-        }
-
-        function autoInvestigation() {
-            window.open('https://spiderfoot.net/', '_blank');
-            showResult('Auto Investigation', 'Opened SpiderFoot for automated OSINT collection', 'success');
-        }
     </script>
 </body>
-</html># 🔍 OSINT Background Check Pro
-
-> **Professional-grade background investigations made simple**
-
-A comprehensive, easy-to-use OSINT (Open Source Intelligence) platform that combines the 10 best free intelligence gathering tools into one streamlined interface. Perfect for investigators, security professionals, HR teams, and anyone needing to conduct thorough background checks.
-
-## 🚀 **Live Demo**
-
-**[Try it now →](https://yourusername.github.io/osint-background-check/)**
-
-![OSINT Background Check Pro Screenshot](https://via.placeholder.com/800x400/667eea/ffffff?text=OSINT+Background+Check+Pro)
-
-## ✨ **Features**
-
-### **10 Integrated OSINT Tools**
-- 👤 **People Search** - Find addresses, phone numbers, relatives
-- 🔒 **Data Breach Check** - Verify if emails/passwords were compromised
-- 📱 **Social Media Intel** - Search across all major platforms
-- 📧 **Email Intelligence** - Domain analysis and verification
-- 🔍 **Advanced Search** - Google dorks and specialized queries
-- 🌐 **Website Analysis** - Technology profiling and history
-- 🔗 **Link Analysis** - Relationship mapping and connections
-- 🕵️ **Username Search** - Check 300+ platforms instantly
-- 📊 **Device Discovery** - Find exposed systems and vulnerabilities
-- 🤖 **Auto Investigation** - Automated data collection
-
-### **Key Benefits**
-- ⚡ **Instant Results** - One-click access to all tools
-- 🎯 **Auto-Populated Searches** - No manual data entry required
-- 📱 **Mobile Responsive** - Works on any device
-- 🆓 **Completely Free** - Uses only free OSINT resources
-- 🔐 **Privacy Focused** - No data stored, all searches external
-- 📊 **Results Tracking** - Monitor your investigation progress
-
-## 🎯 **Use Cases**
-
-### **For Businesses**
-- Pre-employment background screening
-- Vendor and partner due diligence
-- Fraud investigation and prevention
-- Compliance and risk assessment
-
-### **For Investigators**
-- Missing persons cases
-- Asset recovery investigations
-- Cybercrime and fraud cases
-- Due diligence research
-
-### **For Security Teams**
-- Threat intelligence gathering
-- Social engineering assessment
-- Digital forensics support
-- Incident response investigations
-
-## 🚀 **Quick Start**
-
-### **1. Set Your Target**
-```
-Full Name: John Smith
-Email: john@example.com (optional)
-Phone: +1-555-123-4567 (optional)
-Location: New York, NY (optional)
-```
-
-### **2. Choose Your Tools**
-Click any tool button to automatically open searches with your target's information pre-filled.
-
-### **3. Investigate**
-Each tool opens in a new tab with optimized search queries. Results are tracked in the dashboard.
-
-## 🛠️ **Technical Details**
-
-### **Built With**
-- Pure HTML5, CSS3, and JavaScript
-- No external dependencies
-- Responsive design with CSS Grid/Flexbox
-- Progressive Web App ready
-
-### **Browser Support**
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
-
-### **Performance**
-- 📦 Single file deployment
-- ⚡ Instant load time
-- 📱 Mobile optimized
-- 🔒 HTTPS ready
-
-## 🔧 **Deployment**
-
-### **GitHub Pages (Recommended)**
-1. Fork this repository
-2. Go to Settings → Pages
-3. Select "main" branch as source
-4. Your tool will be live at `https://yourusername.github.io/osint-background-check/`
-
-### **Local Development**
-```bash
-git clone https://github.com/yourusername/osint-background-check.git
-cd osint-background-check
-# Open index.html in your browser
-```
-
-### **Other Hosting Options**
-- **Netlify**: Drag and drop the HTML file
-- **Vercel**: Connect your GitHub repo
-- **Web Server**: Upload `index.html` to any hosting provider
-
-## 📊 **Integrated Tools**
-
-| Tool | Purpose | Type | Cost |
-|------|---------|------|------|
-| TruePeopleSearch | People search | Public Records | Free |
-| Have I Been Pwned | Breach checking | Security | Free |
-| Hunter.io | Email discovery | Email Intel | Freemium |
-| Shodan | Device discovery | Network Intel | Freemium |
-| SpiderFoot | Auto OSINT | Automation | Free |
-| Maltego CE | Link analysis | Visualization | Free |
-| Google Dorks | Advanced search | Search Intel | Free |
-| Social Platforms | Social media | Social Intel | Free |
-| BuiltWith | Website analysis | Tech Intel | Freemium |
-| Username Tools | Identity search | Username Intel | Free |
-
-## 🎓 **OSINT Best Practices**
-
-### **Legal & Ethical Guidelines**
-- ✅ Only use publicly available information
-- ✅ Respect privacy laws and regulations
-- ✅ Obtain proper authorization before investigating
-- ✅ Document your methodology for legal compliance
-- ❌ Never access private or protected systems
-- ❌ Don't use information for harassment or stalking
-
-### **Investigation Tips**
-1. **Start Broad** - Begin with basic people search
-2. **Cross-Reference** - Verify information across multiple sources
-3. **Document Everything** - Keep detailed records of your findings
-4. **Stay Updated** - OSINT sources change frequently
-5. **Think Creatively** - Try different search variations and techniques
-
-## 🔒 **Privacy & Security**
-
-### **Data Protection**
-- No personal data is stored on our servers
-- All searches are conducted on external platforms
-- Your investigation data never leaves your browser
-- No tracking or analytics on user behavior
-
-### **Operational Security (OPSEC)**
-- Consider using a VPN for sensitive investigations
-- Use separate browser profiles for different cases
-- Clear browser history after investigations
-- Be aware of your digital footprint while investigating
-
-## 🤝 **Contributing**
-
-We welcome contributions to make this tool even better!
-
-### **How to Contribute**
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-tool`)
-3. Commit your changes (`git commit -m 'Add amazing OSINT tool'`)
-4. Push to the branch (`git push origin feature/amazing-tool`)
-5. Open a Pull Request
-
-### **Ideas for Contributions**
-- Add new OSINT tools
-- Improve the user interface
-- Add export/reporting features
-- Create mobile app version
-- Develop API integrations
-
-## 📞 **Support**
-
-### **Need Help?**
-- 📖 Check our [Wiki](https://github.com/yourusername/osint-background-check/wiki) for detailed guides
-- 🐛 Report bugs in [Issues](https://github.com/yourusername/osint-background-check/issues)
-- 💬 Join our [Discussions](https://github.com/yourusername/osint-background-check/discussions) for community help
-- 📧 Email us at: support@youromain.com
-
-### **Training & Resources**
-- [OSINT Framework](https://osintframework.com/) - Comprehensive tool directory
-- [Bellingcat](https://www.bellingcat.com/) - OSINT investigation tutorials
-- [SANS OSINT](https://www.sans.org/cyber-security-courses/open-source-intelligence-gathering/) - Professional training
-
-## 📈 **Roadmap**
-
-### **Phase 1: MVP** ✅
-- [x] Core 10 OSINT tools integration
-- [x] Basic web interface
-- [x] GitHub Pages deployment
-
-### **Phase 2: Enhanced Features** 🚧
-- [ ] AI-powered result correlation
-- [ ] PDF report generation
-- [ ] Bulk investigation capabilities
-- [ ] API endpoints for automation
-
-### **Phase 3: Professional Platform** 📋
-- [ ] User authentication system
-- [ ] Investigation case management
-- [ ] Team collaboration features
-- [ ] Enterprise compliance tools
-
-## 📄 **License**
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## ⚠️ **Disclaimer**
-
-This tool is for educational and legitimate investigative purposes only. Users are responsible for:
-- Complying with all applicable laws and regulations
-- Obtaining proper authorization before conducting investigations
-- Using the information gathered ethically and responsibly
-- Respecting privacy rights and data protection laws
-
-The developers are not responsible for any misuse of this tool or any consequences resulting from its use.
-
-## 🌟 **Acknowledgments**
-
-- Thanks to all OSINT tool creators for making their resources publicly available
-- Inspired by the need for accessible, professional investigation tools
-- Built in response to increasing cryptocurrency fraud and the need for better due diligence
-
----
-
-**Made with ❤️ for the OSINT community**
-
-If this tool helped you in your investigations, please ⭐ star the repository and share it with others!
+</html>
